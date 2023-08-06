@@ -10,7 +10,9 @@ import * as FileSystem from 'expo-file-system';
 import * as ExpoStableDiffusion from 'expo-stable-diffusion';
 
 const MODEL_PATH = FileSystem.documentDirectory + "compiled";
-const SAVE_PATH = FileSystem.documentDirectory + "GeneratedImages/image.jpeg";
+const SAVE_DIR = FileSystem.cacheDirectory + "GeneratedImages/"
+const IMAGE_NAME = 'image'
+const SAVE_PATH = `${SAVE_DIR}${IMAGE_NAME}.jpeg`
 
 export default function Home() {
   const navigation = useNavigation()
@@ -19,8 +21,15 @@ export default function Home() {
 
   useEffect(() => {
     console.log('user:', user)
-    console.log(SAVE_PATH)
   }, [])
+
+  const ensureDirExists = async() => {
+    const dirInfo = await FileSystem.getInfoAsync(SAVE_DIR);
+    if (!dirInfo.exists) {
+      console.log("directory doesn't exist, creating...");
+      await FileSystem.makeDirectoryAsync(SAVE_DIR, { intermediates: true });
+    }
+  }
   
   const generateImage = async() => {
     try {
@@ -28,6 +37,7 @@ export default function Home() {
       console.log('generate image start')
       await ExpoStableDiffusion.loadModel(MODEL_PATH)
       console.log('Model Loaded, Generating Images!')
+      await ensureDirExists()
       await ExpoStableDiffusion.generateImage({
         prompt: "a photo of an astronaut riding a horse on mars",
         stepCount: 25,

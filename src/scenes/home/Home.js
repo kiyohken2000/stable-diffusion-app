@@ -40,7 +40,7 @@ export default function Home() {
       await ensureDirExists()
       await ExpoStableDiffusion.generateImage({
         prompt: "a photo of an astronaut riding a horse on mars",
-        stepCount: 25,
+        stepCount: 2,
         savePath: SAVE_PATH,
       })
       console.log('image generated')
@@ -52,18 +52,11 @@ export default function Home() {
       setIsLoading(false)
     }
   }
-
-  const onToastPress = () => {
-    showToast({title: 'Hello', body: 'React Native Developer'})
-  }
   
   return (
     <ScreenTemplate>
       <View style={styles.root}>
         <Text style={styles.title}>Home</Text>
-        <View style={styles.textContainer}>
-          <Text>ヘッダーなしボトムタブあり</Text>
-        </View>
         <View style={styles.buttonContainer}>
           <Button
             label="Generate Image"

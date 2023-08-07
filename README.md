@@ -18,3 +18,7 @@ eas update --channel production --message "Updating the app"
 eas device:create
 // list all registered devices for your account
 eas device:list
+
+arch -x86_64 npx expo prebuild
+arch -x86_64 yarn ios
+arch -x86_64 npx expo run:ios --device

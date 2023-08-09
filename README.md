@@ -1,3 +1,11 @@
+# React Native ExpoでStable Diffusionを使うサンプル
+
+ブログ記事
+
+[React NativeでStable Diffusionを使う](https://retwpay.ml/blog/2023-08-09)
+
+[React Native(Expo)でStable Diffusionを使う](https://qiita.com/votepurchase/items/6bef1cca08bf2833e47b?utm_campaign=post_article&utm_medium=twitter&utm_source=twitter_share)
+
 // build: develop
 eas build --profile development --platform ios
 eas build --profile development --platform android

@@ -11,11 +11,15 @@ import * as ExpoStableDiffusion from 'expo-stable-diffusion';
 import AutoHeightImage from 'react-native-auto-height-image';
 import moment from 'moment'
 import { calculateElapsedSeconds } from '../../utils/functions'
+import { generateSteps } from './functions'
+import Selector from '../../components/Selector'
 
 const MODEL_PATH = FileSystem.documentDirectory + "compiled";
 const SAVE_DIR = FileSystem.documentDirectory + "GeneratedImages/"
 const IMAGE_NAME = 'image'
 const SAVE_PATH = `${SAVE_DIR}${IMAGE_NAME}.jpeg`
+
+const dataList = generateSteps()
 
 const { width } = Dimensions.get('window')
 
@@ -26,6 +30,7 @@ export default function Home() {
   const [text, setText] = useState('')
   const [result, setResult] = useState('')
   const [elapsedSeconds, setElapsedSeconds] = useState('')
+  const [stepCount, setStepCount] = useState(1)
 
   useEffect(() => {
     console.log('user:', user)
@@ -50,7 +55,7 @@ export default function Home() {
       await ensureDirExists()
       await ExpoStableDiffusion.generateImage({
         prompt: text,
-        stepCount: 5,
+        stepCount: stepCount,
         savePath: SAVE_PATH,
       })
       console.log('image generated')
@@ -97,6 +102,14 @@ export default function Home() {
                 placeholderTextColor={colors.graySecondary}
                 multiline={true}
               />
+              <View style={{flexDirection: 'row', alignItems: 'center', paddingTop: 10, justifyContent: 'flex-end'}}>
+                <Text style={styles.text}>ステップ数:</Text>
+                <Selector
+                  current={stepCount}
+                  setCurrent={setStepCount}
+                  dataList={dataList}
+                />
+              </View>
             </View>
             <View style={styles.buttonContainer}>
               <Button

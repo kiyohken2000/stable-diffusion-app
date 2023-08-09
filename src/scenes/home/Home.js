@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Alert, TextInput, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Alert, TextInput, Dimensions, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import Button from '../../components/Button'
 import { colors, fontSize } from '../../theme'
 import { useNavigation } from '@react-navigation/native'
@@ -50,7 +50,7 @@ export default function Home() {
       await ensureDirExists()
       await ExpoStableDiffusion.generateImage({
         prompt: text,
-        stepCount: 25,
+        stepCount: 5,
         savePath: SAVE_PATH,
       })
       console.log('image generated')
@@ -69,43 +69,47 @@ export default function Home() {
   return (
     <ScreenTemplate>
       <View style={styles.root}>
-        <View style={{flex: 3}}>
-          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          {result?
-            <View style={{flex: 1, justifyContent: 'center'}}>
-              <AutoHeightImage
-                width={width * 0.9}
-                source={{ uri: result }}
-                defaultSource={require('../../../assets/images/logo-lg.png')}
-              />
-              <View style={{flex: 0.5, alignItems: 'flex-end'}}>
-                <Text>生成にかかった時間: {elapsedSeconds}秒</Text>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+            <View style={{flex: 3}}>
+              <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              {result?
+                <View style={{flex: 1, justifyContent: 'center'}}>
+                  <AutoHeightImage
+                    width={width * 0.9}
+                    source={{ uri: result }}
+                    defaultSource={require('../../../assets/images/logo-lg.png')}
+                  />
+                  <View style={{flex: 0.5, alignItems: 'flex-end'}}>
+                    <Text>生成にかかった時間: {elapsedSeconds}秒</Text>
+                  </View>
+                </View>
+                :
+                <Text style={styles.text}>プロンプトを入力してボタンを押してください</Text>
+                }
               </View>
             </View>
-            :
-            <Text style={styles.text}>プロンプトを入力してボタンを押してください</Text>
-            }
-          </View>
-        </View>
-        <View style={{flex: 1, padding: 5}}>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => setText(text)}
-            placeholder="ここにプロンプトを入力"
-            placeholderTextColor={colors.graySecondary}
-            multiline={true}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            label="Generate Image"
-            color={colors.lightPurple}
-            labelColor={colors.white}
-            disable={false}
-            onPress={generateImage}
-            isLoading={isLoading}
-          />
-        </View>
+            <View style={{flex: 1, padding: 5}}>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={(text) => setText(text)}
+                placeholder="ここにプロンプトを入力"
+                placeholderTextColor={colors.graySecondary}
+                multiline={true}
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <Button
+                label="Generate Image"
+                color={colors.lightPurple}
+                labelColor={colors.white}
+                disable={false}
+                onPress={generateImage}
+                isLoading={isLoading}
+              />
+            </View>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
       </View>
     </ScreenTemplate>
   )

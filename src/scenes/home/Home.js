@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Alert } from 'react-native'
+import { StyleSheet, Text, View, Alert, TextInput, Dimensions } from 'react-native'
 import Button from '../../components/Button'
 import { colors, fontSize } from '../../theme'
 import { useNavigation } from '@react-navigation/native'
@@ -8,16 +8,24 @@ import ScreenTemplate from '../../components/ScreenTemplate'
 import { showToast } from '../../utils/showToast'
 import * as FileSystem from 'expo-file-system';
 import * as ExpoStableDiffusion from 'expo-stable-diffusion';
+import AutoHeightImage from 'react-native-auto-height-image';
+import moment from 'moment'
+import { calculateElapsedSeconds } from '../../utils/functions'
 
 const MODEL_PATH = FileSystem.documentDirectory + "compiled";
-const SAVE_DIR = FileSystem.cacheDirectory + "GeneratedImages/"
+const SAVE_DIR = FileSystem.documentDirectory + "GeneratedImages/"
 const IMAGE_NAME = 'image'
 const SAVE_PATH = `${SAVE_DIR}${IMAGE_NAME}.jpeg`
+
+const { width } = Dimensions.get('window')
 
 export default function Home() {
   const navigation = useNavigation()
   const { user } = useContext(UserContext)
   const [isLoading, setIsLoading] = useState(false)
+  const [text, setText] = useState('')
+  const [result, setResult] = useState('')
+  const [elapsedSeconds, setElapsedSeconds] = useState('')
 
   useEffect(() => {
     console.log('user:', user)
@@ -34,18 +42,23 @@ export default function Home() {
   const generateImage = async() => {
     try {
       setIsLoading(true)
+      setResult('')
+      const startAt = moment().unix()
       console.log('generate image start')
       await ExpoStableDiffusion.loadModel(MODEL_PATH)
       console.log('Model Loaded, Generating Images!')
       await ensureDirExists()
       await ExpoStableDiffusion.generateImage({
-        prompt: "a photo of an astronaut riding a horse on mars",
-        stepCount: 2,
+        prompt: text,
+        stepCount: 25,
         savePath: SAVE_PATH,
       })
       console.log('image generated')
-
-      Alert.alert(`Image Generated: ${SAVE_PATH}`);
+      const finishAt = moment().unix()
+      const elapsed = calculateElapsedSeconds({startAt, finishAt})
+      console.log('elapsed', elapsed)
+      setElapsedSeconds(elapsed)
+      setResult(SAVE_PATH)
     } catch(e) {
       console.log('error', e)
     } finally {
@@ -56,7 +69,33 @@ export default function Home() {
   return (
     <ScreenTemplate>
       <View style={styles.root}>
-        <Text style={styles.title}>Home</Text>
+        <View style={{flex: 3}}>
+          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          {result?
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <AutoHeightImage
+                width={width * 0.9}
+                source={{ uri: result }}
+                defaultSource={require('../../../assets/images/logo-lg.png')}
+              />
+              <View style={{flex: 0.5, alignItems: 'flex-end'}}>
+                <Text>生成にかかった時間: {elapsedSeconds}秒</Text>
+              </View>
+            </View>
+            :
+            <Text style={styles.text}>プロンプトを入力してボタンを押してください</Text>
+            }
+          </View>
+        </View>
+        <View style={{flex: 1, padding: 5}}>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(text) => setText(text)}
+            placeholder="ここにプロンプトを入力"
+            placeholderTextColor={colors.graySecondary}
+            multiline={true}
+          />
+        </View>
         <View style={styles.buttonContainer}>
           <Button
             label="Generate Image"
@@ -75,21 +114,29 @@ export default function Home() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  title: {
-    fontSize: fontSize.xxxLarge,
-    marginBottom: 20,
-  },
-  textContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 5
+  textInput: {
+    backgroundColor: 'transparent',
+    color: colors.black,
+    padding: 5,
+    fontSize: fontSize.large,
+    borderWidth: 1,
+    borderColor: colors.bluePrimary,
+    flex: 1,
+    borderRadius: 5
   },
   buttonContainer: {
-    width: '100%',
-    paddingHorizontal: 10
-  }
+    flex: 0.5,
+    paddingHorizontal: 5,
+    justifyContent: 'center'
+  },
+  image: {
+    width: 100,
+    height: 100,
+  },
+  text: {
+    color: colors.black,
+    fontSize: fontSize.large,
+    fontWeight: "bold",
+  },
 })

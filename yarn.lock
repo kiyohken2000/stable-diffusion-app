@@ -5873,10 +5873,10 @@ expo-modules-core@1.5.4:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
-expo-stable-diffusion@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/expo-stable-diffusion/-/expo-stable-diffusion-0.1.1.tgz#abb384bf2ebb36f4b004f591524dea5e4b5c1f99"
-  integrity sha512-KJcxAPcknE7zulZbeqKmeCQsvZdC41JKedKfLPOh6ptEgxIXkpGmtP6NyRg9R86Lb2zt7M+eT+YU8HPN0EiUJA==
+expo-stable-diffusion@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/expo-stable-diffusion/-/expo-stable-diffusion-0.1.2.tgz#2b53aff0435a4a51db4064f338c2feebac1ed8b5"
+  integrity sha512-incGBb44QbhzvzSNjFtAyJwI15vaLTNUPLmrJN+s7zbn+yVB1DMOl6KZZPn8Meb0Ebolv4F/wg1eMrwkUC6WKw==
 
 expo-structured-headers@~3.3.0:
   version "3.3.0"
@@ -9310,6 +9310,13 @@ react-is@^17.0.1:
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
+
+react-native-auto-height-image@^3.2.4:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/react-native-auto-height-image/-/react-native-auto-height-image-3.2.4.tgz#c7a95d4d9701055c680c8dc02076def1107f9522"
+  integrity sha512-PTVzLuYY4Q5IDAk0QmnSNK12VnUPlt+ZiEJUlo5JUiHverR5Lg386iHK7D2bVkTNo7SCahIPlWzdSuX5Col3XQ==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-native-gesture-handler@~2.12.0:
   version "2.12.0"

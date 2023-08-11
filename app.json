@@ -35,6 +35,9 @@
         "LSSupportsOpeningDocumentsInPlace": true,
         "UISupportsDocumentBrowser": true
       },
+      "entitlements": {
+        "com.apple.developer.kernel.increased-memory-limit": true
+      },
       "userInterfaceStyle": "automatic"
     },
     "android": {

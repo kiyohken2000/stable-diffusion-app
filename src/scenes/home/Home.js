@@ -18,6 +18,7 @@ const MODEL_PATH = FileSystem.documentDirectory + "compiled";
 const SAVE_DIR = FileSystem.documentDirectory + "GeneratedImages/"
 const IMAGE_NAME = 'image'
 const SAVE_PATH = `${SAVE_DIR}${IMAGE_NAME}.jpeg`
+// const SAVE_PATH = FileSystem.documentDirectory + "image.jpeg";
 
 const dataList = generateSteps()
 

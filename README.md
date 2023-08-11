@@ -24,6 +24,12 @@ eas build --profile production --platform ios
 eas build --profile production --platform android
 
 // OTA update
+expo publish --release-channel internal
+expo publish --release-channel production
+
+eas channel:create internal
+eas channel:create production
+
 eas update --channel internal --message "Updating the app"
 eas update --channel production --message "Updating the app"
 
